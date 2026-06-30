@@ -7,12 +7,16 @@ const multer = require('multer');
 const fs = require('fs');
 const AWS = require('aws-sdk');
 
-// DigitalOcean Spaces Credentials (extracted from Revoo configuration)
-const DO_SPACES_KEY = process.env.DO_SPACES_KEY || "DO00U72P47BHHPDLVRRT";
-const DO_SPACES_SECRET = process.env.DO_SPACES_SECRET || "HXp2L4tWP0jrcD2S96s83nlFXP8jh4CFHmiMt0BZ7ew";
+// DigitalOcean Spaces Credentials (read securely from env)
+const DO_SPACES_KEY = process.env.DO_SPACES_KEY;
+const DO_SPACES_SECRET = process.env.DO_SPACES_SECRET;
 const DO_BUCKET = process.env.DO_BUCKET || "appzest";
 const DO_REGION = process.env.DO_REGION || "blr1";
 const DO_ENDPOINT = process.env.DO_ENDPOINT || "blr1.digitaloceanspaces.com";
+
+if (!DO_SPACES_KEY || !DO_SPACES_SECRET) {
+    console.warn("WARNING: DO_SPACES_KEY or DO_SPACES_SECRET is not defined in environment variables!");
+}
 
 const s3 = new AWS.S3({
     endpoint: new AWS.Endpoint(DO_ENDPOINT),
@@ -134,6 +138,12 @@ app.post('/api/admin/apps', async (req, res) => {
 // Endpoint: Fetch active offers (calculated dynamically based on app_id)
 app.get('/api/offers', async (req, res) => {
     const appId = req.query.app_id || '4';
+    const lock = req.query.lock;
+    
+    if (lock === '1') {
+        return res.json({ success: true, offers: [] });
+    }
+
     try {
         const [appRows] = await pool.query('SELECT conversion_rate FROM apps WHERE app_id = ?', [appId]);
         const rate = appRows.length > 0 ? appRows[0].conversion_rate : 100;

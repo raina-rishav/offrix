@@ -838,6 +838,14 @@
             from { transform: translateY(60px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+        @keyframes pulseGlow {
+            0% { transform: scale(1); box-shadow: 0 0 25px var(--primary-glow); }
+            100% { transform: scale(1.05); box-shadow: 0 0 45px var(--secondary-glow); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -863,6 +871,21 @@
 
     <!-- Main Container -->
     <main class="main-container">
+
+        <!-- Coming Soon Screen -->
+        <div id="comingSoonSection" style="display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; text-align: center; padding: 3rem 1.5rem; gap: 2rem; animation: fadeIn 0.8s ease-in-out;">
+            <div class="coming-soon-icon" style="width: 100px; height: 100px; border-radius: 30px; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; color: #fff; box-shadow: 0 0 40px var(--primary-glow); font-size: 3rem; animation: pulseGlow 2s infinite alternate ease-in-out;">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(to right, #fff, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Coming Soon</h1>
+                <p id="comingSoonMessage" style="color: var(--text-muted); font-size: 1.1rem; max-width: 400px; line-height: 1.6; font-weight: 500;">We're preparing something amazing for you. Stay tuned!</p>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); padding: 1rem 2rem; border-radius: 50px; display: flex; align-items: center; gap: 0.6rem; color: var(--primary); font-weight: 600; font-size: 0.9rem;">
+                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                <span>Launching shortly</span>
+            </div>
+        </div>
 
         <!-- 1. HOME TAB -->
         <div id="homeTab" class="tab-content active">
@@ -997,6 +1020,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         let currentUserId = urlParams.get('uid') || urlParams.get('user_id') || 'test_user';
         let currentAppId = urlParams.get('appid') || urlParams.get('app_id') || '4';
+        const isLocked = urlParams.get('lock') === '1';
         
         let allOffers = [];
         let activeFilter = 'all';
@@ -1066,6 +1090,11 @@
         // Fetch and display active offers
         async function loadOffers() {
             try {
+                if (isLocked) {
+                    allOffers = [];
+                    renderOffers();
+                    return;
+                }
                 const response = await fetch(`/api/offers?app_id=${currentAppId}`);
                 const data = await response.json();
                 
@@ -1447,12 +1476,32 @@
         // Auto-run on start
         window.addEventListener('DOMContentLoaded', async () => {
             try {
-                // Fetch App config, User Info, and Offers in parallel
-                await Promise.all([
-                    fetchAppConfig(),
-                    fetchUserInfo(),
-                    loadOffers()
-                ]);
+                if (isLocked) {
+                    // Hide tabs and bottom navigation
+                    const homeTab = document.getElementById('homeTab');
+                    if (homeTab) homeTab.style.display = 'none';
+                    const statusTab = document.getElementById('statusTab');
+                    if (statusTab) statusTab.style.display = 'none';
+                    const bottomNav = document.querySelector('.bottom-nav');
+                    if (bottomNav) bottomNav.style.display = 'none';
+                    
+                    // Show coming soon section
+                    const comingSoon = document.getElementById('comingSoonSection');
+                    if (comingSoon) comingSoon.style.display = 'flex';
+                    
+                    // Fetch App config and User Info in parallel, but skip offers
+                    await Promise.all([
+                        fetchAppConfig(),
+                        fetchUserInfo()
+                    ]);
+                } else {
+                    // Fetch App config, User Info, and Offers in parallel
+                    await Promise.all([
+                        fetchAppConfig(),
+                        fetchUserInfo(),
+                        loadOffers()
+                    ]);
+                }
             } catch (err) {
                 console.error("Initialization failed", err);
             } finally {
