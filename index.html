@@ -842,6 +842,16 @@
 </head>
 <body>
 
+    <!-- Premium Intro Splash Screen (Fades out after database load) -->
+    <div id="appSplashScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #06070d; z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; transition: opacity 0.5s ease-in-out;">
+        <div style="width: 80px; height: 80px; border-radius: 24px; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; color: #fff; box-shadow: 0 0 35px var(--primary-glow); font-size: 2.2rem; font-weight: 800; font-family: 'Outfit', sans-serif;">O</div>
+        <div style="font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(to right, #fff, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">OFFRIX</div>
+        <div style="display: flex; align-items: center; gap: 0.6rem; color: var(--text-muted); font-size: 0.9rem;">
+            <i class="fa-solid fa-spinner fa-spin" style="color: var(--primary);"></i>
+            <span>Loading offerwall...</span>
+        </div>
+    </div>
+
     <!-- Ambient moving background orbs -->
     <div class="ambient-bg">
         <div class="orb orb-1"></div>
@@ -1436,9 +1446,23 @@
 
         // Auto-run on start
         window.addEventListener('DOMContentLoaded', async () => {
-            await fetchAppConfig();
-            fetchUserInfo();
-            loadOffers();
+            try {
+                // Fetch App config, User Info, and Offers in parallel
+                await Promise.all([
+                    fetchAppConfig(),
+                    fetchUserInfo(),
+                    loadOffers()
+                ]);
+            } catch (err) {
+                console.error("Initialization failed", err);
+            } finally {
+                // Fade out splash screen once loaded
+                const splash = document.getElementById('appSplashScreen');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    setTimeout(() => splash.remove(), 500);
+                }
+            }
         });
     </script>
 </body>
