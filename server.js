@@ -5,6 +5,22 @@ const cors = require('cors');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
+const AWS = require('aws-sdk');
+
+// DigitalOcean Spaces Credentials (extracted from Revoo configuration)
+const DO_SPACES_KEY = process.env.DO_SPACES_KEY || "DO00U72P47BHHPDLVRRT";
+const DO_SPACES_SECRET = process.env.DO_SPACES_SECRET || "HXp2L4tWP0jrcD2S96s83nlFXP8jh4CFHmiMt0BZ7ew";
+const DO_BUCKET = process.env.DO_BUCKET || "appzest";
+const DO_REGION = process.env.DO_REGION || "blr1";
+const DO_ENDPOINT = process.env.DO_ENDPOINT || "blr1.digitaloceanspaces.com";
+
+const s3 = new AWS.S3({
+    endpoint: new AWS.Endpoint(DO_ENDPOINT),
+    accessKeyId: DO_SPACES_KEY,
+    secretAccessKey: DO_SPACES_SECRET,
+    region: DO_REGION,
+    signatureVersion: "v4",
+});
 
 const app = express();
 const PORT = process.env.PORT || 3010;
@@ -23,16 +39,8 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 app.use(express.static(path.join(__dirname)));
 app.use('/uploads', express.static(UPLOADS_DIR));
 
-// Setup Multer storage configuration
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, UPLOADS_DIR);
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
-});
+// Setup Multer memory storage configuration (required for Vercel/Spaces)
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage, limits: { fileSize: 10 * 1024 * 1024 } }); // 10MB limit
 
 // MySQL Database Connection Pool with SSL config
@@ -289,9 +297,22 @@ app.post('/api/review-submit', upload.single('screenshot'), async (req, res) => 
     }
 
     const appId = app_id || '4';
-    const screenshotUrl = `/uploads/${req.file.filename}`;
 
     try {
+        const file = req.file;
+        const ext = path.extname(file.originalname) || ".jpg";
+        const key = `offrix/reviews/${appId}/${Date.now()}_${Math.round(Math.random() * 1e5)}${ext}`;
+
+        const uploadParams = {
+            Bucket: DO_BUCKET,
+            Key: key,
+            Body: file.buffer,
+            ACL: "public-read",
+            ContentType: file.mimetype || "image/jpeg",
+        };
+
+        const uploadResult = await s3.upload(uploadParams).promise();
+        const screenshotUrl = uploadResult.Location;
         // Fetch Offer details to calculate points and get its title
         const [offers] = await pool.query('SELECT title, payout_rupees FROM offers WHERE id = ?', [offer_id]);
         if (offers.length === 0) {
