@@ -638,6 +638,13 @@
                     <label class="form-label">Coin Icon URL</label>
                     <input type="url" class="form-input" id="coin_icon_url" placeholder="e.g. https://example.com/coin.png">
                 </div>
+                <div class="form-group">
+                    <label class="form-label">Theme Primary Color</label>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <input type="color" class="form-input" id="app_primary_color_picker" style="width: 45px; height: 38px; padding: 0.2rem; cursor: pointer; border-radius: 8px; background: transparent; border: 1px solid var(--card-border);" oninput="document.getElementById('app_primary_color').value = this.value">
+                        <input type="text" class="form-input" id="app_primary_color" placeholder="e.g. #6366f1" style="flex: 1;" oninput="document.getElementById('app_primary_color_picker').value = this.value" required>
+                    </div>
+                </div>
                 <div class="modal-actions">
                     <button type="button" class="btn-cancel" onclick="closeAppModal()">Cancel</button>
                     <button type="submit" class="btn-submit">Save Settings</button>
@@ -807,11 +814,16 @@
                     document.getElementById('app_name').value = app.app_name;
                     document.getElementById('conversion_rate').value = app.conversion_rate;
                     document.getElementById('coin_icon_url').value = app.coin_icon_url || '';
+                    const colorVal = app.primary_color || '#6366f1';
+                    document.getElementById('app_primary_color').value = colorVal;
+                    document.getElementById('app_primary_color_picker').value = colorVal;
                 }
             } else {
                 document.getElementById('appModalTitle').innerText = 'Add App Configuration';
                 document.getElementById('appForm').reset();
                 document.getElementById('app_id').disabled = false;
+                document.getElementById('app_primary_color').value = '#6366f1';
+                document.getElementById('app_primary_color_picker').value = '#6366f1';
             }
         }
 
@@ -829,7 +841,8 @@
                 app_id: document.getElementById('app_id').value,
                 app_name: document.getElementById('app_name').value,
                 conversion_rate: parseInt(document.getElementById('conversion_rate').value),
-                coin_icon_url: document.getElementById('coin_icon_url').value
+                coin_icon_url: document.getElementById('coin_icon_url').value,
+                primary_color: document.getElementById('app_primary_color').value
             };
 
             try {

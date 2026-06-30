@@ -146,7 +146,7 @@
             font-size: 1.6rem;
             font-weight: 800;
             letter-spacing: -0.5px;
-            background: linear-gradient(to right, #fff, #c084fc);
+            background: linear-gradient(to right, #fff, var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -234,10 +234,11 @@
 
         /* Featured Banner Card */
         .featured-card {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15));
-            border: 1px solid rgba(168, 85, 247, 0.25);
+            background: linear-gradient(135deg, var(--primary-glow), var(--secondary-glow));
+            border: 1px solid var(--secondary-glow);
             border-radius: 20px;
             padding: 1.5rem;
+            margin-top: 20px;
             margin-bottom: 2rem;
             position: relative;
             overflow: hidden;
@@ -807,7 +808,7 @@
             border: none !important;
             box-shadow: none !important;
             padding: 0 !important;
-            margin: 0 auto !important;
+            margin: 20px auto 0 auto !important;
             max-width: 600px !important;
             width: 100% !important;
             display: flex !important;
@@ -853,7 +854,7 @@
     <!-- Premium Intro Splash Screen (Fades out after database load) -->
     <div id="appSplashScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #06070d; z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; transition: opacity 0.5s ease-in-out;">
         <div style="width: 80px; height: 80px; border-radius: 24px; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; color: #fff; box-shadow: 0 0 35px var(--primary-glow); font-size: 2.2rem; font-weight: 800; font-family: 'Outfit', sans-serif;">O</div>
-        <div style="font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(to right, #fff, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">OFFRIX</div>
+        <div style="font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(to right, #fff, var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">OFFRIX</div>
         <div style="display: flex; align-items: center; gap: 0.6rem; color: var(--text-muted); font-size: 0.9rem;">
             <i class="fa-solid fa-spinner fa-spin" style="color: var(--primary);"></i>
             <span>Loading offerwall...</span>
@@ -878,7 +879,7 @@
                 <i class="fa-solid fa-lock"></i>
             </div>
             <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(to right, #fff, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Coming Soon</h1>
+                <h1 style="font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(to right, #fff, var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Coming Soon</h1>
                 <p id="comingSoonMessage" style="color: var(--text-muted); font-size: 1.1rem; max-width: 400px; line-height: 1.6; font-weight: 500;">We're preparing something amazing for you. Stay tuned!</p>
             </div>
             <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); padding: 1rem 2rem; border-radius: 50px; display: flex; align-items: center; gap: 0.6rem; color: var(--primary); font-weight: 600; font-size: 0.9rem;">
@@ -960,7 +961,7 @@
 
     <!-- Offer Details Overlay Modal -->
     <div class="modal-overlay" id="offerDetailsModal" style="position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; background: var(--bg-color) !important; z-index: 10000 !important; overflow-y: auto !important; padding: 2.5rem 1.5rem 180px 1.5rem !important; display: none; justify-content: flex-start !important; align-items: flex-start !important; border: none !important; border-radius: 0 !important; box-shadow: none !important;">
-        <div class="modal" style="background: transparent !important; border: none !important; border-radius: 0 !important; box-shadow: none !important; padding: 0 !important; margin: 0 auto !important; max-width: 600px !important; width: 100% !important; display: flex !important; flex-direction: column !important; gap: 1.5rem !important; animation: none !important; position: relative !important;">
+        <div class="modal" style="background: transparent !important; border: none !important; border-radius: 0 !important; box-shadow: none !important; padding: 0 !important; margin: 20px auto 0 auto !important; max-width: 600px !important; width: 100% !important; display: flex !important; flex-direction: column !important; gap: 1.5rem !important; animation: none !important; position: relative !important;">
             <div class="modal-header">
                 <h3 class="modal-title" id="detailsModalTitle">Campaign Details</h3>
                 <button class="close-btn" onclick="closeDetailsModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -1027,15 +1028,151 @@
         let appSettings = {
             app_name: 'Offrix',
             conversion_rate: 100,
-            coin_icon_url: 'https://img.icons8.com/color/48/gold-ingress-decal.png'
+            coin_icon_url: 'https://img.icons8.com/color/48/gold-ingress-decal.png',
+            primary_color: '#6366f1'
         };
 
-        // Initialize elements
+        // Helper: Convert Hex color to RGBA
+        function hexToRgba(hex, alpha) {
+            hex = hex.replace('#', '');
+            if (hex.length === 3) {
+                hex = hex.split('').map(char => char + char).join('');
+            }
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+            if (isNaN(r) || isNaN(g) || isNaN(b)) return null;
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
 
-        const userNameEl = document.getElementById('userName');
-        if (userNameEl) userNameEl.innerText = currentUserId;
-        const userAvatarEl = document.getElementById('userAvatar');
-        if (userAvatarEl) userAvatarEl.innerText = currentUserId.charAt(0).toUpperCase();
+        // Helper: Shift Hex color hue in HSL space
+        function shiftColorHue(hex, degree) {
+            hex = hex.replace('#', '');
+            if (hex.length === 3) {
+                hex = hex.split('').map(char => char + char).join('');
+            }
+            let r = parseInt(hex.substring(0, 2), 16) / 255;
+            let g = parseInt(hex.substring(2, 4), 16) / 255;
+            let b = parseInt(hex.substring(4, 6), 16) / 255;
+
+            let max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0;
+            } else {
+                let d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+
+            h = (h * 360 + degree) % 360;
+            if (h < 0) h += 360;
+            h /= 360;
+
+            function hue2rgb(p, q, t) {
+                if (t < 0) t += 1;
+                if (t > 1) t -= 1;
+                if (t < 1/6) return p + (q - p) * 6 * t;
+                if (t < 1/2) return q;
+                if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                return p;
+            }
+
+            let rOut, gOut, bOut;
+            if (s === 0) {
+                rOut = gOut = bOut = l;
+            } else {
+                let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                let p = 2 * l - q;
+                rOut = hue2rgb(p, q, h + 1/3);
+                gOut = hue2rgb(p, q, h);
+                bOut = hue2rgb(p, q, h - 1/3);
+            }
+
+            const toHex = val => {
+                const hexVal = Math.round(val * 255).toString(16);
+                return hexVal.length === 1 ? '0' + hexVal : hexVal;
+            };
+
+            return `#${toHex(rOut)}${toHex(gOut)}${toHex(bOut)}`;
+        }
+
+        // Helper: Generate a very dark matching background color
+        function getDarkBgColor(hex) {
+            hex = hex.replace('#', '');
+            if (hex.length === 3) {
+                hex = hex.split('').map(char => char + char).join('');
+            }
+            let r = parseInt(hex.substring(0, 2), 16) / 255;
+            let g = parseInt(hex.substring(2, 4), 16) / 255;
+            let b = parseInt(hex.substring(4, 6), 16) / 255;
+
+            let max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h;
+
+            if (max === min) {
+                h = 0;
+            } else {
+                let d = max - min;
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+
+            const s = 0.12; // 12% saturation
+            const l = 0.05; // 5% lightness
+
+            function hue2rgb(p, q, t) {
+                if (t < 0) t += 1;
+                if (t > 1) t -= 1;
+                if (t < 1/6) return p + (q - p) * 6 * t;
+                if (t < 1/2) return q;
+                if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                return p;
+            }
+
+            let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            let p = 2 * l - q;
+            let rOut = hue2rgb(p, q, h + 1/3);
+            let gOut = hue2rgb(p, q, h);
+            let bOut = hue2rgb(p, q, h - 1/3);
+
+            const toHex = val => {
+                const hexVal = Math.round(val * 255).toString(16);
+                return hexVal.length === 1 ? '0' + hexVal : hexVal;
+            };
+
+            return `#${toHex(rOut)}${toHex(gOut)}${toHex(bOut)}`;
+        }
+
+        // Apply theme color settings dynamically to :root
+        function applyDynamicTheme(primaryHex) {
+            if (!primaryHex) return;
+            const root = document.documentElement;
+            root.style.setProperty('--primary', primaryHex);
+            
+            const primaryGlow = hexToRgba(primaryHex, 0.4);
+            if (primaryGlow) root.style.setProperty('--primary-glow', primaryGlow);
+            
+            const secondaryHex = shiftColorHue(primaryHex, 40);
+            if (secondaryHex) {
+                root.style.setProperty('--secondary', secondaryHex);
+                const secondaryGlow = hexToRgba(secondaryHex, 0.4);
+                if (secondaryGlow) root.style.setProperty('--secondary-glow', secondaryGlow);
+            }
+
+            const darkBg = getDarkBgColor(primaryHex);
+            if (darkBg) root.style.setProperty('--bg-color', darkBg);
+        }
 
         // Fetch App Configuration
         async function fetchAppConfig() {
@@ -1045,6 +1182,9 @@
                 if (data.success && data.app) {
                     appSettings = data.app;
                     document.title = `${appSettings.app_name} | Powered by Offrix`;
+                    if (appSettings.primary_color) {
+                        applyDynamicTheme(appSettings.primary_color);
+                    }
                 }
             } catch (err) {
                 console.error("Error loading app config", err);

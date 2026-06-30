@@ -68,6 +68,18 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
+// Auto-migrate apps table to add primary_color column if it doesn't exist
+(async () => {
+    try {
+        await pool.query("ALTER TABLE apps ADD COLUMN primary_color VARCHAR(50) DEFAULT '#6366f1'");
+        console.log("Database altered: primary_color column added to apps table");
+    } catch (err) {
+        if (err.code !== 'ER_DUP_FIELDNAME') {
+            console.warn("Notice: apps table alteration failed:", err.message);
+        }
+    }
+})();
+
 // ==================== APP API ENDPOINTS ====================
 
 // Endpoint: Get App Configuration by App ID
@@ -84,7 +96,8 @@ app.get('/api/app', async (req, res) => {
                     app_id: appId,
                     app_name: 'Offrix Offerwall',
                     conversion_rate: 100,
-                    coin_icon_url: 'https://img.icons8.com/color/48/gold-ingress-decal.png'
+                    coin_icon_url: 'https://img.icons8.com/color/48/gold-ingress-decal.png',
+                    primary_color: '#6366f1'
                 }
             });
         }
@@ -106,7 +119,7 @@ app.get('/api/admin/apps', async (req, res) => {
 
 // Endpoint: Create/Update App configuration (Admin Panel)
 app.post('/api/admin/apps', async (req, res) => {
-    const { app_id, app_name, conversion_rate, coin_icon_url } = req.body;
+    const { app_id, app_name, conversion_rate, coin_icon_url, primary_color } = req.body;
     if (!app_id || !app_name) {
         return res.status(400).json({ success: false, message: 'App ID and App Name are required' });
     }
@@ -115,14 +128,14 @@ app.post('/api/admin/apps', async (req, res) => {
         const [existing] = await pool.query('SELECT * FROM apps WHERE app_id = ?', [app_id]);
         if (existing.length > 0) {
             await pool.query(
-                'UPDATE apps SET app_name = ?, conversion_rate = ?, coin_icon_url = ? WHERE app_id = ?',
-                [app_name, parseInt(conversion_rate || '100'), coin_icon_url, app_id]
+                'UPDATE apps SET app_name = ?, conversion_rate = ?, coin_icon_url = ?, primary_color = ? WHERE app_id = ?',
+                [app_name, parseInt(conversion_rate || '100'), coin_icon_url, primary_color || '#6366f1', app_id]
             );
             return res.json({ success: true, message: 'App updated successfully' });
         } else {
             await pool.query(
-                'INSERT INTO apps (app_id, app_name, conversion_rate, coin_icon_url) VALUES (?, ?, ?, ?)',
-                [app_id, app_name, parseInt(conversion_rate || '100'), coin_icon_url]
+                'INSERT INTO apps (app_id, app_name, conversion_rate, coin_icon_url, primary_color) VALUES (?, ?, ?, ?, ?)',
+                [app_id, app_name, parseInt(conversion_rate || '100'), coin_icon_url, primary_color || '#6366f1']
             );
             return res.json({ success: true, message: 'App created successfully' });
         }
