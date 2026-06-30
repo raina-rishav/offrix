@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offrix | Admin Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #06070d;
+            --card-bg: rgba(15, 18, 36, 0.6);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary: #6366f1; /* Indigo */
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --secondary: #a855f7; /* Purple */
+            --secondary-glow: rgba(168, 85, 247, 0.4);
+            --accent: #10b981; /* Emerald Green */
+            --accent-glow: rgba(16, 185, 129, 0.4);
+            --warning: #f59e0b; /* Amber */
+            --warning-glow: rgba(245, 158, 11, 0.4);
+            --danger: #ef4444; /* Red */
+            --danger-glow: rgba(239, 68, 68, 0.4);
+            
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dark: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.3;
+            mix-blend-mode: screen;
+            animation: float-around 20s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 80%);
+            top: -5%;
+            left: -10%;
+        }
+
+        .orb-2 {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, var(--secondary) 0%, transparent 80%);
+            bottom: -10%;
+            right: -10%;
+            animation-duration: 25s;
+        }
+
+        @keyframes float-around {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, 40px) scale(1.15); }
+            100% { transform: translate(-20px, -20px) scale(0.9); }
+        }
+
+        header {
+            background: rgba(10, 11, 20, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .brand-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #fff, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab-btn.active, .nav-tab-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .main-container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .section-header {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: #fff;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px var(--primary-glow);
+            transition: all 0.3s ease;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 180px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .card-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .card-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.1rem;
+        }
+
+        .card-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 0.8rem;
+            margin-top: auto;
+        }
+
+        .badge-value {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: rgba(16, 185, 129, 0.1);
+            padding: 0.25rem 0.6rem;
+            border-radius: 8px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-edit {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 0.3rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit:hover {
+            color: #fff;
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        /* Review Completions Table & Elements */
+        .conv-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .conv-card {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .conv-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            flex: 1;
+        }
+
+        .conv-user {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .conv-details {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .conv-screenshot {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+            cursor: pointer;
+            background: #000;
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+
+        .conv-screenshot:hover {
+            transform: scale(1.05);
+        }
+
+        .conv-screenshot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .conv-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .btn-approve {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px var(--accent-glow);
+            font-size: 0.8rem;
+        }
+
+        .btn-reject {
+            background: var(--danger);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px var(--danger-glow);
+            font-size: 0.8rem;
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            width: fit-content;
+        }
+
+        .status-badge.completed {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-badge.rejected {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Forms / Modals styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .modal {
+            background: #0d0f1f;
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 480px;
+            padding: 1.8rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            margin: auto;
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 0.6rem 0.8rem;
+            color: #fff;
+            outline: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 5px var(--primary-glow);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 0.65rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            flex: 2;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: #fff;
+            padding: 0.65rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 10px var(--primary-glow);
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(16, 185, 129, 0.9);
+            color: #fff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 100000;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <header>
+        <div class="brand">
+            <div class="brand-icon"><i class="fa-solid fa-gauge"></i></div>
+            <div class="brand-text">OFFRIX ADMIN</div>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-tab-btn active" id="tabAppsBtn" onclick="switchSection('apps')">Apps Settings</button>
+            <button class="nav-tab-btn" id="tabOffersBtn" onclick="switchSection('offers')">Campaigns</button>
+            <button class="nav-tab-btn" id="tabConversionsBtn" onclick="switchSection('conversions')">User Completions</button>
+        </div>
+    </header>
+
+    <main class="main-container">
+
+        <!-- ==================== APPS SECTION ==================== -->
+        <section id="appsSection" class="admin-section active">
+            <div class="section-header">
+                <span>Integrated Apps</span>
+                <button class="btn-add" onclick="openAppModal()"><i class="fa-solid fa-plus"></i> Add App</button>
+            </div>
+            <div class="items-grid" id="appsGrid">
+                <!-- Dynamically loaded -->
+            </div>
+        </section>
+
+        <!-- ==================== OFFERS SECTION ==================== -->
+        <section id="offersSection" class="admin-section">
+            <div class="section-header">
+                <span>Campaign List (Rupees Payout)</span>
+                <button class="btn-add" onclick="openOfferModal()"><i class="fa-solid fa-plus"></i> Add Campaign</button>
+            </div>
+            <div class="items-grid" id="offersGrid">
+                <!-- Dynamically loaded -->
+            </div>
+        </section>
+
+        <!-- ==================== CONVERSIONS SECTION ==================== -->
+        <section id="conversionsSection" class="admin-section">
+            <div class="section-header">
+                <span>User Review Completions</span>
+            </div>
+            <div id="conversionsList">
+                <!-- Dynamically loaded -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- App Configuration Modal -->
+    <div class="modal-overlay" id="appModal">
+        <div class="modal">
+            <h3 class="modal-title" id="appModalTitle">Add App Configuration</h3>
+            <form id="appForm" onsubmit="saveApp(event)">
+                <div class="form-group">
+                    <label class="form-label">App ID (Unique identifier used in URL)</label>
+                    <input type="text" class="form-input" id="app_id" placeholder="e.g. 4" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">App Name</label>
+                    <input type="text" class="form-input" id="app_name" placeholder="e.g. CashXP" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">1 Rupee = How many Coins?</label>
+                    <input type="number" class="form-input" id="conversion_rate" value="100" placeholder="e.g. 100" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Coin Icon URL</label>
+                    <input type="url" class="form-input" id="coin_icon_url" placeholder="e.g. https://example.com/coin.png">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeAppModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">Save Settings</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Offer/Campaign Modal -->
+    <div class="modal-overlay" id="offerModal">
+        <div class="modal">
+            <h3 class="modal-title" id="offerModalTitle">Add Campaign Offer</h3>
+            <form id="offerForm" onsubmit="saveOffer(event)">
+                <input type="hidden" id="offer_id">
+                <div class="form-group">
+                    <label class="form-label">Campaign Title</label>
+                    <input type="text" class="form-input" id="offer_title" placeholder="e.g. Lords Mobile" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Campaign Type</label>
+                    <select class="form-select" id="offer_type">
+                        <option value="game">Game (Redirection + Steps)</option>
+                        <option value="geemee">Geemee (Redirection + GAID + Steps)</option>
+                        <option value="review">Review (Screenshot Upload + Steps)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="offer_desc" placeholder="Offer description..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Campaign Payout in Rupees (e.g. 4.50)</label>
+                    <input type="number" step="0.01" class="form-input" id="offer_payout" placeholder="e.g. 4.50" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Campaign Steps / Instructions (New line for each step)</label>
+                    <textarea class="form-textarea" id="offer_steps" placeholder="Step 1: Install app&#10;Step 2: Attack a level 2 monster" style="min-height: 100px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Review Text to Copy (For review type campaign)</label>
+                    <textarea class="form-textarea" id="offer_review_text" placeholder="I enjoy using this app..." style="min-height: 80px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Offer/Campaign Redirect URL</label>
+                    <input type="url" class="form-input" id="offer_url" placeholder="Redirect link..." required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Campaign Image/Icon URL</label>
+                    <input type="url" class="form-input" id="offer_image" placeholder="Image icon link...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Network/Provider Name</label>
+                    <input type="text" class="form-input" id="offer_provider" placeholder="e.g. AdGate, Offrix" value="Offrix">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" id="offer_status">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeOfferModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">Save Campaign</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Image Preview Modal -->
+    <div class="modal-overlay" id="imgModal" onclick="closeImgModal()">
+        <div class="modal" style="max-width: 600px; background: transparent; border: none; box-shadow: none; text-align: center;">
+            <img src="" id="imgPreview" style="max-width: 100%; max-height: 80vh; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.2);">
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 'apps';
+        let apps = [];
+        let offers = [];
+        let conversions = [];
+
+        function switchSection(section) {
+            currentSection = section;
+            document.getElementById('tabAppsBtn').classList.remove('active');
+            document.getElementById('tabOffersBtn').classList.remove('active');
+            document.getElementById('tabConversionsBtn').classList.remove('active');
+            
+            document.getElementById('appsSection').classList.remove('active');
+            document.getElementById('offersSection').classList.remove('active');
+            document.getElementById('conversionsSection').classList.remove('active');
+
+            if (section === 'apps') {
+                document.getElementById('tabAppsBtn').classList.add('active');
+                document.getElementById('appsSection').classList.add('active');
+                loadApps();
+            } else if (section === 'offers') {
+                document.getElementById('tabOffersBtn').classList.add('active');
+                document.getElementById('offersSection').classList.add('active');
+                loadOffers();
+            } else {
+                document.getElementById('tabConversionsBtn').classList.add('active');
+                document.getElementById('conversionsSection').classList.add('active');
+                loadConversions();
+            }
+        }
+
+        // ==================== APPS CONTROLLER ====================
+
+        async function loadApps() {
+            try {
+                const response = await fetch('/api/admin/apps');
+                const data = await response.json();
+                if (data.success) {
+                    apps = data.apps;
+                    renderAppsGrid();
+                }
+            } catch (err) {
+                console.error("Failed to load apps:", err);
+            }
+        }
+
+        function renderAppsGrid() {
+            const grid = document.getElementById('appsGrid');
+            grid.innerHTML = '';
+            if (apps.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">No Apps configured yet. Click "Add App" to start.</div>';
+                return;
+            }
+
+            apps.forEach(app => {
+                const card = document.createElement('div');
+                card.className = 'glass-card';
+                card.innerHTML = `
+                    <div>
+                        <div class="card-top">
+                            <div class="card-icon">
+                                <img src="${app.coin_icon_url || 'https://img.icons8.com/color/48/gold-ingress-decal.png'}" alt="coin icon">
+                            </div>
+                            <div class="card-meta">
+                                <span class="card-title">${app.app_name}</span>
+                                <span class="card-subtitle">App ID: <b>${app.app_id}</b></span>
+                            </div>
+                        </div>
+                        <div class="card-desc">
+                            1 Rupee = <b>${app.conversion_rate}</b> coins. <br>
+                            Offerwall link: <a href="/?app_id=${app.app_id}" target="_blank" style="color:var(--primary); text-decoration:none;">/?app_id=${app.app_id}</a>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge-value">Rate: ${app.conversion_rate}x</span>
+                        <button class="btn-edit" onclick="editApp('${app.app_id}')">Edit</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openAppModal(appId = null) {
+            document.getElementById('appModal').style.display = 'flex';
+            if (appId) {
+                document.getElementById('appModalTitle').innerText = 'Edit App Configuration';
+                const app = apps.find(a => a.app_id === appId);
+                if (app) {
+                    document.getElementById('app_id').value = app.app_id;
+                    document.getElementById('app_id').disabled = true;
+                    document.getElementById('app_name').value = app.app_name;
+                    document.getElementById('conversion_rate').value = app.conversion_rate;
+                    document.getElementById('coin_icon_url').value = app.coin_icon_url || '';
+                }
+            } else {
+                document.getElementById('appModalTitle').innerText = 'Add App Configuration';
+                document.getElementById('appForm').reset();
+                document.getElementById('app_id').disabled = false;
+            }
+        }
+
+        function closeAppModal() {
+            document.getElementById('appModal').style.display = 'none';
+        }
+
+        function editApp(appId) {
+            openAppModal(appId);
+        }
+
+        async function saveApp(event) {
+            event.preventDefault();
+            const payload = {
+                app_id: document.getElementById('app_id').value,
+                app_name: document.getElementById('app_name').value,
+                conversion_rate: parseInt(document.getElementById('conversion_rate').value),
+                coin_icon_url: document.getElementById('coin_icon_url').value
+            };
+
+            try {
+                const response = await fetch('/api/admin/apps', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    closeAppModal();
+                    showToast(data.message);
+                    loadApps();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // ==================== OFFERS CONTROLLER ====================
+
+        async function loadOffers() {
+            try {
+                const response = await fetch('/api/admin/offers');
+                const data = await response.json();
+                if (data.success) {
+                    offers = data.offers;
+                    renderOffersGrid();
+                }
+            } catch (err) {
+                console.error("Failed to load offers:", err);
+            }
+        }
+
+        function renderOffersGrid() {
+            const grid = document.getElementById('offersGrid');
+            grid.innerHTML = '';
+            if (offers.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">No Campaigns configured yet. Click "Add Campaign" to start.</div>';
+                return;
+            }
+
+            offers.forEach(offer => {
+                const card = document.createElement('div');
+                card.className = 'glass-card';
+                card.innerHTML = `
+                    <div>
+                        <div class="card-top">
+                            <div class="card-icon">
+                                <img src="${offer.image_url || 'https://img.icons8.com/color/120/coins.png'}" alt="offer icon">
+                            </div>
+                            <div class="card-meta">
+                                <span class="card-title">${offer.title}</span>
+                                <span class="card-subtitle">Type: <b>${offer.campaign_type}</b> | Provider: ${offer.provider} | Status: <b style="color:${offer.status === 'active'?'var(--accent)':'var(--text-dark)'}">${offer.status}</b></span>
+                            </div>
+                        </div>
+                        <div class="card-desc">${offer.description || 'No description.'}</div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge-value">Rs. ${parseFloat(offer.payout_rupees).toFixed(2)}</span>
+                        <button class="btn-edit" onclick="editOffer(${offer.id})">Edit</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openOfferModal(offerId = null) {
+            document.getElementById('offerModal').style.display = 'flex';
+            if (offerId) {
+                document.getElementById('offerModalTitle').innerText = 'Edit Campaign Offer';
+                const offer = offers.find(o => o.id === offerId);
+                if (offer) {
+                    document.getElementById('offer_id').value = offer.id;
+                    document.getElementById('offer_title').value = offer.title;
+                    document.getElementById('offer_type').value = offer.campaign_type || 'game';
+                    document.getElementById('offer_desc').value = offer.description || '';
+                    document.getElementById('offer_payout').value = offer.payout_rupees;
+                    document.getElementById('offer_steps').value = offer.steps || '';
+                    document.getElementById('offer_review_text').value = offer.review_text || '';
+                    document.getElementById('offer_url').value = offer.offer_url;
+                    document.getElementById('offer_image').value = offer.image_url || '';
+                    document.getElementById('offer_provider').value = offer.provider;
+                    document.getElementById('offer_status').value = offer.status;
+                }
+            } else {
+                document.getElementById('offerModalTitle').innerText = 'Add Campaign Offer';
+                document.getElementById('offerForm').reset();
+                document.getElementById('offer_id').value = '';
+            }
+        }
+
+        function closeOfferModal() {
+            document.getElementById('offerModal').style.display = 'none';
+        }
+
+        function editOffer(id) {
+            openOfferModal(id);
+        }
+
+        async function saveOffer(event) {
+            event.preventDefault();
+            const idVal = document.getElementById('offer_id').value;
+            const payload = {
+                title: document.getElementById('offer_title').value,
+                campaign_type: document.getElementById('offer_type').value,
+                description: document.getElementById('offer_desc').value,
+                payout_rupees: parseFloat(document.getElementById('offer_payout').value),
+                steps: document.getElementById('offer_steps').value,
+                review_text: document.getElementById('offer_review_text').value,
+                offer_url: document.getElementById('offer_url').value,
+                image_url: document.getElementById('offer_image').value,
+                provider: document.getElementById('offer_provider').value,
+                status: document.getElementById('offer_status').value
+            };
+            
+            if (idVal) {
+                payload.id = parseInt(idVal);
+            }
+
+            try {
+                const response = await fetch('/api/admin/offers', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    closeOfferModal();
+                    showToast(data.message);
+                    loadOffers();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+
+        // ==================== CONVERSIONS / REVIEWS CONTROLLER ====================
+
+        async function loadConversions() {
+            try {
+                const response = await fetch('/api/admin/conversions');
+                const data = await response.json();
+                if (data.success) {
+                    conversions = data.conversions;
+                    renderConversionsList();
+                }
+            } catch (err) {
+                console.error("Failed to load conversions:", err);
+            }
+        }
+
+        function renderConversionsList() {
+            const list = document.getElementById('conversionsList');
+            list.innerHTML = '';
+            if (conversions.length === 0) {
+                list.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 3rem;">No conversions recorded yet.</div>';
+                return;
+            }
+
+            conversions.forEach(conv => {
+                const card = document.createElement('div');
+                card.className = 'conv-card';
+                
+                let screenshotHtml = '';
+                if (conv.review_screenshot) {
+                    screenshotHtml = `
+                        <div class="conv-screenshot" onclick="previewImage('${conv.review_screenshot}')">
+                            <img src="${conv.review_screenshot}" alt="screenshot">
+                        </div>`;
+                }
+
+                let actionsHtml = '';
+                if (conv.status === 'pending') {
+                    actionsHtml = `
+                        <div class="conv-actions">
+                            <button class="btn-approve" onclick="updateConversionStatus(${conv.id}, 'completed')">Approve</button>
+                            <button class="btn-reject" onclick="updateConversionStatus(${conv.id}, 'rejected')">Reject</button>
+                        </div>`;
+                } else {
+                    actionsHtml = `<span class="status-badge ${conv.status}">${conv.status}</span>`;
+                }
+
+                const formattedDate = new Date(conv.created_at).toLocaleString();
+
+                card.innerHTML = `
+                    <div class="conv-info">
+                        <div class="conv-user">
+                            <i class="fa-solid fa-user" style="color:var(--primary);"></i> ${conv.user_id}
+                        </div>
+                        <div class="conv-details">
+                            Offer Name: <b>${conv.offer_name}</b> <br>
+                            Transaction ID: <code>${conv.transaction_id}</code> <br>
+                            Earned Payout: <b>${Number(conv.points).toLocaleString()} coins</b> <br>
+                            Date: ${formattedDate}
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap;">
+                        ${screenshotHtml}
+                        ${actionsHtml}
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        async function updateConversionStatus(id, newStatus) {
+            if (!confirm(`Are you sure you want to mark this completion as ${newStatus}?`)) return;
+            
+            try {
+                const response = await fetch('/api/admin/conversions/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, status: newStatus })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    showToast(data.message);
+                    loadConversions();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function previewImage(url) {
+            document.getElementById('imgPreview').src = url;
+            document.getElementById('imgModal').style.display = 'flex';
+        }
+
+        function closeImgModal() {
+            document.getElementById('imgModal').style.display = 'none';
+        }
+
+        // Toast utility
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>${message}</span>`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.3s ease reverse forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadApps();
+        });
+    </script>
+</body>
+</html>

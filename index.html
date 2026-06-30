@@ -3,29 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offrix | Coming Soon</title>
-    <meta name="description" content="Offrix is coming soon. Sign up to get notified when we launch.">
+    <title>Offrix | Premium Offerwall</title>
+    <meta name="description" content="Offrix is a premium high-paying offerwall platform. Complete offers, surveys and earn rewards.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-
-    
     <style>
         :root {
-            --bg-color: #0b0d19;
+            --bg-color: #080911;
+            --card-bg: rgba(15, 18, 36, 0.6);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-highlight: rgba(255, 255, 255, 0.03);
             --primary: #6366f1; /* Indigo */
-            --primary-glow: rgba(99, 102, 241, 0.5);
+            --primary-glow: rgba(99, 102, 241, 0.4);
             --secondary: #a855f7; /* Purple */
-            --secondary-glow: rgba(168, 85, 247, 0.5);
-            --accent: #06b6d4; /* Cyan */
-            --accent-glow: rgba(6, 182, 212, 0.5);
+            --secondary-glow: rgba(168, 85, 247, 0.4);
+            --accent: #10b981; /* Emerald Green */
+            --accent-glow: rgba(16, 185, 129, 0.4);
+            --warning: #f59e0b; /* Amber */
+            --warning-glow: rgba(245, 158, 11, 0.4);
+            --danger: #ef4444; /* Red */
+            --danger-glow: rgba(239, 68, 68, 0.4);
+            
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --glass-bg: rgba(15, 23, 42, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-highlight: rgba(255, 255, 255, 0.03);
+            --text-dark: #64748b;
         }
 
         * {
@@ -33,6 +39,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -40,20 +47,20 @@
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
             overflow-x: hidden;
             position: relative;
+            padding-bottom: 90px; /* Space for bottom navigation */
         }
 
-        /* Ambient Animated Background Background Orbs */
+        /* Ambient animated orbs in background */
         .ambient-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: -2;
             overflow: hidden;
             pointer-events: none;
         }
@@ -61,198 +68,775 @@
         .orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.4;
+            filter: blur(140px);
+            opacity: 0.35;
             mix-blend-mode: screen;
-            animation: float-around 25s infinite alternate ease-in-out;
+            animation: float-around 20s infinite alternate ease-in-out;
         }
 
         .orb-1 {
-            width: 400px;
-            height: 400px;
+            width: 350px;
+            height: 350px;
             background: radial-gradient(circle, var(--primary) 0%, transparent 80%);
-            top: -10%;
-            left: 10%;
-            animation-duration: 20s;
+            top: -5%;
+            left: -10%;
         }
 
         .orb-2 {
-            width: 500px;
-            height: 500px;
+            width: 450px;
+            height: 450px;
             background: radial-gradient(circle, var(--secondary) 0%, transparent 80%);
-            bottom: -15%;
-            right: 10%;
-            animation-duration: 28s;
+            bottom: 10%;
+            right: -10%;
+            animation-duration: 25s;
         }
 
         .orb-3 {
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, var(--accent) 0%, transparent 80%);
-            top: 40%;
-            right: 25%;
+            background: radial-gradient(circle, #3b82f6 0%, transparent 80%);
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
             animation-duration: 22s;
         }
 
         @keyframes float-around {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-            50% {
-                transform: translate(50px, 30px) scale(1.1);
-            }
-            100% {
-                transform: translate(-30px, -50px) scale(0.9);
-            }
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, 40px) scale(1.15); }
+            100% { transform: translate(-20px, -20px) scale(0.9); }
         }
 
-        /* Container Layout */
-        .container {
+        /* Header Layout */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(8, 9, 17, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.2rem;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #fff, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* User Profile & Points Info */
+        .user-widget {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            padding: 0.4rem 0.8rem 0.4rem 0.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-widget:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #fff;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .username {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .user-balance {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .user-balance i {
+            font-size: 0.8rem;
+            filter: drop-shadow(0 0 5px var(--accent-glow));
+        }
+
+        /* Main Container */
+        .main-container {
+            flex: 1;
+            max-width: 720px;
             width: 100%;
-            max-width: 800px;
-            padding: 2.5rem;
-            margin: 1.5rem;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* Tabs Container with transition */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Featured Banner Card */
+        .featured-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15));
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 160px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .featured-card::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--secondary-glow) 0%, transparent 70%);
             z-index: 1;
+            pointer-events: none;
+        }
+
+        .featured-badge {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            width: fit-content;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .featured-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .featured-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+            max-width: 80%;
+        }
+
+        .featured-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .featured-points {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .featured-points i {
+            color: #fbbf24;
+        }
+
+        .btn-featured {
+            background: #fff;
+            color: #000;
+            font-weight: 700;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-featured:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.35);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            margin-bottom: 1.2rem;
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .filter-section::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        /* Offers Grid / List */
+        .section-header {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .offers-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .offer-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.25rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            min-height: 220px;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            background: rgba(15, 18, 36, 0.8);
+        }
+
+        .offer-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
+        }
+
+        .offer-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .offer-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            margin: 0.2rem 0;
+        }
+
+        .offer-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .offer-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .offer-badges {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.2rem;
+        }
+
+        .offer-badge {
+            font-size: 0.65rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-dark);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .offer-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.4rem;
+        }
+
+        .offer-payout {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--accent);
+            background: rgba(16, 185, 129, 0.1);
+            padding: 0.3rem 0.6rem;
+            border-radius: 10px;
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            white-space: nowrap;
+        }
+
+        /* Status Tab CSS */
+        .status-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.2rem;
             text-align: center;
         }
 
-        /* Glassmorphic Card Wrapper */
-        .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 3rem 2rem;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3),
-                        inset 0 1px 0 var(--glass-highlight);
+        .summary-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-top: 0.3rem;
+        }
+
+        .summary-value.earnings {
+            color: var(--accent);
+        }
+
+        .summary-value.tasks {
+            color: var(--primary);
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .conversion-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .conversion-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .conversion-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .conversion-meta {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 50px;
+            text-transform: capitalize;
+        }
+
+        .status-badge.completed {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            box-shadow: 0 0 8px var(--warning-glow);
+        }
+
+        .status-badge.rejected {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            box-shadow: 0 0 8px var(--danger-glow);
+        }
+
+        /* Bottom Nav Styling */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 720px;
+            background: rgba(10, 11, 20, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-top: 1px solid var(--card-border);
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
-            animation: fade-in-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            padding: 0.2rem 1rem;
         }
 
-        @keyframes fade-in-up {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .nav-item i {
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
         }
 
-        /* Glowing Border Highlight on Card */
-        .card::before {
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item.active i {
+            transform: translateY(-2px);
+            filter: drop-shadow(0 0 8px var(--primary-glow));
+        }
+
+        .nav-item.active::after {
             content: '';
             position: absolute;
+            bottom: -5px;
+            width: 12px;
+            height: 3px;
+            border-radius: 50px;
+            background: var(--primary);
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+
+        .modal-overlay {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-            transform: translateX(-100%);
-            transition: 0.6s;
-            pointer-events: none;
-        }
-
-        .card:hover::before {
-            transform: translateX(100%);
-        }
-
-        /* Logo / Branding */
-        .brand-header {
-            margin-bottom: 2rem;
-            display: inline-flex;
-            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            display: none;
             justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 1.5rem;
         }
 
-        .logo {
+        .modal {
+            background: #0f1224;
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .modal-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            background: linear-gradient(135deg, #ffffff 40%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
-            position: relative;
+            font-size: 1.2rem;
+            font-weight: 700;
         }
 
-        /* Badge Indicator */
-        .badge {
-            display: inline-block;
-            background: rgba(99, 102, 241, 0.15);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            color: #a5b4fc;
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 10px 4px rgba(99, 102, 241, 0);
-            }
-        }
-
-        /* Title & Content */
-        h1 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 3rem;
-            font-weight: 800;
-            line-height: 1.15;
-            margin-bottom: 1rem;
-            letter-spacing: -0.5px;
-            background: linear-gradient(to right, #ffffff, #e2e8f0, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        h1 span {
-            background: linear-gradient(to right, var(--accent), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
-        }
-
-        .subtitle {
+        .close-btn {
+            background: none;
+            border: none;
             color: var(--text-muted);
+            cursor: pointer;
             font-size: 1.1rem;
-            font-weight: 300;
-            max-width: 550px;
-            margin: 0 auto 2.5rem auto;
-            line-height: 1.6;
         }
 
+        .form-group {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
 
+        .form-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
 
-        /* Media Queries for Responsiveness */
-        @media (max-width: 640px) {
-            .container {
-                padding: 1rem;
-                margin: 0.5rem;
-            }
-            .card {
-                padding: 2.5rem 1.25rem;
-                border-radius: 20px;
-            }
-            h1 {
-                font-size: 2.2rem;
-            }
-            .subtitle {
-                font-size: 1rem;
-                margin-bottom: 2rem;
-            }
+        .form-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 0.6rem 0.8rem;
+            color: #fff;
+            outline: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 5px var(--primary-glow);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 0.6rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            flex: 2;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: #fff;
+            padding: 0.6rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 10px var(--primary-glow);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            opacity: 0.4;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(16, 185, 129, 0.9);
+            color: #fff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 100000;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        /* Fullscreen details overlay */
+        #offerDetailsModal {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: var(--bg-color) !important;
+            z-index: 10000 !important;
+            overflow-y: auto !important;
+            padding: 2.5rem 1.5rem 180px 1.5rem !important;
+            display: none;
+            justify-content: flex-start !important;
+            align-items: flex-start !important;
+        }
+
+        #offerDetailsModal .modal {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            margin: 0 auto !important;
+            max-width: 600px !important;
+            width: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 1.5rem !important;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+        }
+
+        #offerDetailsModal .modal-actions {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            width: 100% !important;
+            max-width: 600px !important;
+            background: rgba(10, 11, 20, 0.98) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border-top: 1px solid var(--card-border) !important;
+            padding: 1.2rem 1.5rem !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 0.8rem !important;
+            z-index: 10005 !important;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(60px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
     </style>
 </head>
@@ -265,22 +849,597 @@
         <div class="orb orb-3"></div>
     </div>
 
-    <div class="container">
-        <div class="card">
-            <!-- Brand Logo -->
-            <div class="brand-header">
-                <div class="logo">OFFRIX</div>
+
+
+    <!-- Main Container -->
+    <main class="main-container">
+
+        <!-- 1. HOME TAB -->
+        <div id="homeTab" class="tab-content active">
+            <!-- Featured promo offer -->
+            <div class="featured-card" id="featuredOfferCard" style="display:none;">
+                <div>
+                    <div class="featured-badge">Featured Offer</div>
+                    <div class="featured-title" id="featuredTitle">Lords Mobile Battle</div>
+                    <div class="featured-desc" id="featuredDesc">Play Lords Mobile, attack a level 2 monster to redeem reward.</div>
+                </div>
+                <div class="featured-footer">
+                    <div class="featured-points" id="featuredPointsContainer"><span id="featuredPoints">+3,500</span></div>
+                    <button class="btn-featured" id="featuredBtn">Earn Now</button>
+                </div>
             </div>
 
-            <!-- Launch badge status -->
-            <div class="badge">🚀 Coming Soon</div>
-
-            <!-- Header Content -->
-            <h1>Something Amazing <br>is <span>On The Way</span></h1>
-            <p class="subtitle">We're developing a state-of-the-art solution to elevate your digital experience. Stay tuned for updates.</p>
 
 
+            <!-- Offers listing -->
+            <div class="offers-list" id="offersList">
+                <!-- Dynamic offers populated by JS -->
+                <div class="empty-state">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <p>Loading offers...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. STATUS TAB -->
+        <div id="statusTab" class="tab-content">
+            <!-- Conversions summary -->
+            <div class="status-summary">
+                <div class="summary-card">
+                    <div class="summary-label">Total Earned</div>
+                    <div class="summary-value earnings" id="totalEarnedCoins">0</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Completed Tasks</div>
+                    <div class="summary-value tasks" id="totalCompletedTasks">0</div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <span>Conversion History</span>
+                <span style="font-size:0.75rem; color:var(--text-muted);" id="lastUpdatedStatus">Updated just now</span>
+            </div>
+
+            <!-- Status history logs list -->
+            <div id="statusHistoryList">
+                <!-- Dynamic status lists populated by JS -->
+                <div class="empty-state">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <p>Loading status history...</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" id="btnHomeTab" onclick="switchTab('home')">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" id="btnStatusTab" onclick="switchTab('status')">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Status</span>
+        </button>
+    </nav>
+
+
+    <!-- Offer Details Overlay Modal -->
+    <div class="modal-overlay" id="offerDetailsModal" style="position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; background: var(--bg-color) !important; z-index: 10000 !important; overflow-y: auto !important; padding: 2.5rem 1.5rem 180px 1.5rem !important; display: none; justify-content: flex-start !important; align-items: flex-start !important; border: none !important; border-radius: 0 !important; box-shadow: none !important;">
+        <div class="modal" style="background: transparent !important; border: none !important; border-radius: 0 !important; box-shadow: none !important; padding: 0 !important; margin: 0 auto !important; max-width: 600px !important; width: 100% !important; display: flex !important; flex-direction: column !important; gap: 1.5rem !important; animation: none !important; position: relative !important;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="detailsModalTitle">Campaign Details</h3>
+                <button class="close-btn" onclick="closeDetailsModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="offer-icon" id="detailsIcon" style="width: 54px; height: 54px; border-radius: 14px; background: rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; padding:6px; border:1px solid rgba(255,255,255,0.05);">
+                    <img src="" alt="" id="detailsIconImg" style="width:100%; height:100%; object-fit:contain;">
+                </div>
+                <div>
+                    <h4 id="detailsTitle" style="font-size: 1.1rem; font-weight: 700; color: #fff;">Campaign Name</h4>
+                    <span id="detailsPayoutContainer" style="margin-top: 0.3rem; display: inline-block;"></span>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <h5 style="font-size: 0.9rem; text-transform: uppercase; color: var(--primary); margin-bottom: 0.6rem; letter-spacing: 0.5px; font-weight: 700;">Instructions</h5>
+                <div id="detailsSteps" style="font-size: 0.98rem; color: var(--text-main); line-height: 1.6; background: rgba(255,255,255,0.03); padding: 1.2rem; border-radius: 12px; border: 1px solid var(--card-border); text-align: left; white-space: pre-line;">
+                    <!-- Steps listed here -->
+                </div>
+            </div>
+
+            <!-- Review Text Copy Section (Matching Revoo) -->
+            <div id="reviewCopySection" style="display: none; margin-bottom: 1.5rem; text-align: left;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <h5 style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px;">Review Text to Copy</h5>
+                    <button class="btn-edit" id="btnCopyReviewText" onclick="copyReviewText()" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">
+                        <i class="fa-solid fa-copy"></i> Copy
+                    </button>
+                </div>
+                <div id="detailsReviewText" style="font-size: 0.85rem; color: #fff; line-height: 1.5; background: rgba(99, 102, 241, 0.05); border: 2px dashed rgba(99, 102, 241, 0.3); padding: 1rem; border-radius: 12px; margin-bottom: 0.8rem; text-align: center;">
+                    <!-- Review text loaded here -->
+                </div>
+                <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); padding: 0.8rem; border-radius: 12px; font-size: 0.75rem; color: #f59e0b; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Copy & paste the exact review text for 99% approval chance!</span>
+                </div>
+            </div>
+
+            <!-- Dynamic Buttons Section (Matching Revoo) -->
+            <div class="modal-actions" style="position: fixed !important; bottom: 0 !important; left: 50% !important; transform: translateX(-50%) !important; width: 100% !important; max-width: 600px !important; background: rgba(10, 11, 20, 0.98) !important; backdrop-filter: blur(20px) !important; -webkit-backdrop-filter: blur(20px) !important; border-top: 1px solid var(--card-border) !important; padding: 1.2rem 1.5rem !important; display: flex !important; flex-direction: column !important; gap: 0.8rem !important; z-index: 10005 !important;">
+                <button class="btn-submit" id="btnPrimaryAction" onclick="handlePrimaryAction()" style="width: 100%;">Start Offer</button>
+                
+                <input type="file" id="reviewFileInput" accept="image/*" style="display: none;" onchange="handleReviewFileChange(event)">
+                <button class="btn-submit" id="btnSecondaryAction" onclick="handleSecondaryAction()" style="width: 100%; display: none; background: transparent; border: 2px solid var(--primary); color: var(--primary); box-shadow: none;">
+                    <i class="fa-solid fa-cloud-arrow-up" style="margin-right:6px;"></i> Submit Screenshot
+                </button>
+                
+                <button class="btn-cancel" onclick="closeDetailsModal()" style="width: 100%;">Close</button>
+            </div>
         </div>
     </div>
+
+    <!-- Client-side Javascript logic -->
+    <script>
+        // Get user_id and app_id from query params
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentUserId = urlParams.get('uid') || urlParams.get('user_id') || 'test_user';
+        let currentAppId = urlParams.get('appid') || urlParams.get('app_id') || '4';
+        
+        let allOffers = [];
+        let activeFilter = 'all';
+        let appSettings = {
+            app_name: 'Offrix',
+            conversion_rate: 100,
+            coin_icon_url: 'https://img.icons8.com/color/48/gold-ingress-decal.png'
+        };
+
+        // Initialize elements
+
+        const userNameEl = document.getElementById('userName');
+        if (userNameEl) userNameEl.innerText = currentUserId;
+        const userAvatarEl = document.getElementById('userAvatar');
+        if (userAvatarEl) userAvatarEl.innerText = currentUserId.charAt(0).toUpperCase();
+
+        // Fetch App Configuration
+        async function fetchAppConfig() {
+            try {
+                const response = await fetch(`/api/app?app_id=${currentAppId}`);
+                const data = await response.json();
+                if (data.success && data.app) {
+                    appSettings = data.app;
+                    document.title = `${appSettings.app_name} | Powered by Offrix`;
+                }
+            } catch (err) {
+                console.error("Error loading app config", err);
+            }
+        }
+
+        // Switch bottom navigation tabs
+        function switchTab(tabName) {
+            // Update active state of buttons
+            document.getElementById('btnHomeTab').classList.remove('active');
+            document.getElementById('btnStatusTab').classList.remove('active');
+            
+            // Update active tab contents
+            document.getElementById('homeTab').classList.remove('active');
+            document.getElementById('statusTab').classList.remove('active');
+
+            if (tabName === 'home') {
+                document.getElementById('btnHomeTab').classList.add('active');
+                document.getElementById('homeTab').classList.add('active');
+                loadOffers();
+            } else if (tabName === 'status') {
+                document.getElementById('btnStatusTab').classList.add('active');
+                document.getElementById('statusTab').classList.add('active');
+                loadStatusHistory();
+            }
+        }
+
+        // Fetch user information
+        async function fetchUserInfo() {
+            try {
+                const response = await fetch(`/api/user?user_id=${currentUserId}`);
+                const data = await response.json();
+                if (data.success) {
+                    const balanceEl = document.getElementById('userBalanceVal');
+                    if (balanceEl) balanceEl.innerText = Number(data.user.balance).toLocaleString();
+                    document.getElementById('totalEarnedCoins').innerText = Number(data.user.total_earned).toLocaleString();
+                }
+            } catch (err) {
+                console.error("Error loading user info", err);
+            }
+        }
+
+        // Fetch and display active offers
+        async function loadOffers() {
+            try {
+                const response = await fetch(`/api/offers?app_id=${currentAppId}`);
+                const data = await response.json();
+                
+                if (data.success && data.offers) {
+                    allOffers = data.offers;
+                    renderOffers();
+                } else {
+                    document.getElementById('offersList').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <p>No active offers found</p>
+                        </div>`;
+                }
+            } catch (err) {
+                console.error("Error loading offers", err);
+                document.getElementById('offersList').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-circle-exclamation" style="color:var(--danger)"></i>
+                        <p>Error loading offers from database</p>
+                    </div>`;
+            }
+        }
+
+        // Render offers dynamically based on filters
+        function renderOffers() {
+            const container = document.getElementById('offersList');
+            const filtered = activeFilter === 'all' 
+                ? allOffers 
+                : allOffers.filter(o => o.provider.toLowerCase() === activeFilter.toLowerCase());
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <p>No offers available in this category</p>
+                    </div>`;
+                return;
+            }
+
+            // Setup featured offer (use the highest paying offer)
+            if (allOffers.length > 0 && activeFilter === 'all') {
+                const highest = allOffers[0];
+                document.getElementById('featuredOfferCard').style.display = 'flex';
+                document.getElementById('featuredTitle').innerText = highest.title;
+                document.getElementById('featuredDesc').innerText = highest.description;
+                
+                const coinIconHtml = appSettings.coin_icon_url 
+                    ? `<img src="${appSettings.coin_icon_url}" style="width:16px; height:16px; object-fit:contain; vertical-align:middle; margin-right:4px;">` 
+                    : `<i class="fa-solid fa-coins"></i>`;
+                
+                document.getElementById('featuredPointsContainer').innerHTML = `${coinIconHtml} <span id="featuredPoints">+${Number(highest.points).toLocaleString()}</span>`;
+                document.getElementById('featuredBtn').onclick = () => openDetailsModal(highest.id);
+            } else {
+                document.getElementById('featuredOfferCard').style.display = 'none';
+            }
+
+            container.innerHTML = '';
+            filtered.forEach(offer => {
+                const card = document.createElement('div');
+                card.className = 'offer-card';
+                card.onclick = () => openDetailsModal(offer.id);
+                
+                const coinIconHtml = appSettings.coin_icon_url 
+                    ? `<img src="${appSettings.coin_icon_url}" style="width:14px; height:14px; object-fit:contain; vertical-align:middle; margin-right:4px;">` 
+                    : `<i class="fa-solid fa-coins" style="margin-right:4px;"></i>`;
+
+                card.innerHTML = `
+                    <div class="offer-icon">
+                        <img src="${offer.image_url || 'https://img.icons8.com/color/120/coins.png'}" alt="${offer.title}">
+                    </div>
+                    <div class="offer-info">
+                        <span class="offer-title">${offer.title}</span>
+                        <span class="offer-desc">${offer.description}</span>
+                    </div>
+                    <span class="offer-payout">${coinIconHtml}+${Number(offer.points).toLocaleString()}</span>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Handle category filtering
+        function filterOffers(provider) {
+            activeFilter = provider;
+            
+            // Highlight filter button
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText === provider || (provider === 'all' && btn.innerText === 'All Offers')) {
+                    btn.classList.add('active');
+                }
+            });
+
+            renderOffers();
+        }
+
+        // Fetch and display user conversions (Status tab)
+        async function loadStatusHistory() {
+            try {
+                const response = await fetch(`/api/status?user_id=${currentUserId}`);
+                const data = await response.json();
+                
+                if (data.success && data.status) {
+                    const list = document.getElementById('statusHistoryList');
+                    const history = data.status;
+
+                    // Update total completed counter
+                    const completedTasks = history.filter(c => c.status === 'completed').length;
+                    document.getElementById('totalCompletedTasks').innerText = completedTasks;
+
+                    if (history.length === 0) {
+                        list.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fa-solid fa-hourglass-empty"></i>
+                                <p>No completed or pending tasks yet</p>
+                            </div>`;
+                        return;
+                    }
+
+                    list.innerHTML = '';
+                    history.forEach(item => {
+                        const formattedDate = new Date(item.created_at).toLocaleDateString(undefined, {
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+
+                        const card = document.createElement('div');
+                        card.className = 'conversion-card';
+                        
+                        card.innerHTML = `
+                            <div class="conversion-details">
+                                <span class="conversion-name">${item.offer_name}</span>
+                                <span class="conversion-meta">${formattedDate} • TxID: ${item.transaction_id.slice(-8)}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.8rem;">
+                                <span style="font-weight: 700; color: ${item.status === 'completed' ? 'var(--accent)' : 'var(--text-muted)'}">
+                                    +${Number(item.points).toLocaleString()}
+                                </span>
+                                <span class="status-badge ${item.status}">
+                                    ${item.status}
+                                </span>
+                            </div>
+                        `;
+                        list.appendChild(card);
+                    });
+
+                    document.getElementById('lastUpdatedStatus').innerText = 'Updated just now';
+                }
+            } catch (err) {
+                console.error("Error loading conversion status history", err);
+                document.getElementById('statusHistoryList').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-circle-exclamation" style="color:var(--danger)"></i>
+                        <p>Error loading history from database</p>
+                    </div>`;
+            }
+        }
+
+        let activeOffer = null; // Track current active offer in modal
+        let reviewCountdownInterval = null;
+        let reviewCountdownSeconds = 0;
+
+        function openDetailsModal(offerId) {
+            const offer = allOffers.find(o => o.id === offerId);
+            if (!offer) return;
+            activeOffer = offer;
+
+            document.getElementById('detailsTitle').innerText = offer.title;
+            document.getElementById('detailsIconImg').src = offer.image_url || 'https://img.icons8.com/color/120/coins.png';
+            
+            const coinIconHtml = appSettings.coin_icon_url 
+                ? `<img src="${appSettings.coin_icon_url}" style="width:14px; height:14px; object-fit:contain; vertical-align:middle; margin-right:4px;">` 
+                : `<i class="fa-solid fa-coins" style="margin-right:4px;"></i>`;
+            document.getElementById('detailsPayoutContainer').innerHTML = `<span class="offer-payout">${coinIconHtml}+${Number(offer.points).toLocaleString()}</span>`;
+            
+            // Format steps
+            const defaultSteps = "Step 1: Click Start Offer to redirect.\nStep 2: Complete the campaign requirements.\nStep 3: Receive your coins automatically.";
+            document.getElementById('detailsSteps').innerText = offer.steps || defaultSteps;
+
+            const primaryBtn = document.getElementById('btnPrimaryAction');
+            const secondaryBtn = document.getElementById('btnSecondaryAction');
+            
+            // Reset state
+            if (reviewCountdownInterval) {
+                clearInterval(reviewCountdownInterval);
+                reviewCountdownInterval = null;
+            }
+            document.getElementById('reviewFileInput').value = '';
+
+            const reviewCopySection = document.getElementById('reviewCopySection');
+            if (offer.campaign_type === 'review') {
+                reviewCopySection.style.display = 'block';
+                const defaultReview = "I enjoy using this app for its rent payment service features. Everything is responsive and efficient. I found a great apartment and made secure payments effortlessly. Highly satisfied with the overall experience.";
+                document.getElementById('detailsReviewText').innerText = offer.review_text || defaultReview;
+                
+                primaryBtn.innerText = 'Copy & Go to Play Store';
+                secondaryBtn.style.display = 'block';
+                secondaryBtn.disabled = true;
+                secondaryBtn.style.opacity = '0.5';
+                secondaryBtn.style.cursor = 'not-allowed';
+                secondaryBtn.innerHTML = `<i class="fa-solid fa-clock" style="margin-right:6px;"></i> Wait 0:30 to Submit`;
+            } else {
+                reviewCopySection.style.display = 'none';
+                primaryBtn.innerText = 'Start Offer';
+                secondaryBtn.style.display = 'none';
+            }
+
+            document.getElementById('offerDetailsModal').style.display = 'flex';
+        }
+
+        function closeDetailsModal() {
+            document.getElementById('offerDetailsModal').style.display = 'none';
+            activeOffer = null;
+            if (reviewCountdownInterval) {
+                clearInterval(reviewCountdownInterval);
+                reviewCountdownInterval = null;
+            }
+        }
+
+        function handlePrimaryAction() {
+            if (!activeOffer) return;
+
+            let targetUrl = activeOffer.offer_url;
+            const appNameParam = (appSettings.app_name || 'offrix').toLowerCase().replace(/\s+/g, '');
+            const userIdParam = currentUserId;
+
+            // 1. If geemee type, handle GAID / did= first
+            if (activeOffer.campaign_type === 'geemee') {
+                const gaid = urlParams.get('gaid') || '';
+                if (targetUrl.includes('did=')) {
+                    targetUrl = targetUrl + encodeURIComponent(gaid);
+                } else {
+                    const separator = targetUrl.includes('?') ? '&' : '?';
+                    targetUrl = gaid ? `${targetUrl}${separator}gaid=${encodeURIComponent(gaid)}` : targetUrl;
+                }
+            }
+
+            // 2. Append pid and ref_id parameters depending on URL type (Play Store vs others)
+            if (targetUrl.includes('play.google.com/store/apps/details')) {
+                try {
+                    const parsedUrl = new URL(targetUrl);
+                    const pkgId = parsedUrl.searchParams.get('id');
+                    if (pkgId) {
+                        const referrerString = `pid=${encodeURIComponent(appNameParam)}&ref_id=${encodeURIComponent(userIdParam)}`;
+                        targetUrl = `https://play.google.com/store/apps/details?id=${encodeURIComponent(pkgId)}&referrer=${encodeURIComponent(referrerString)}`;
+                    }
+                } catch (e) {
+                    console.error("Failed to parse Play Store URL:", e);
+                }
+            } else {
+                const separator = targetUrl.includes('?') ? '&' : '?';
+                targetUrl = `${targetUrl}${separator}pid=${encodeURIComponent(appNameParam)}&ref_id=${encodeURIComponent(userIdParam)}`;
+            }
+
+            // 3. Handle copy behavior for review campaigns
+            if (activeOffer.campaign_type === 'review') {
+                const reviewText = activeOffer.review_text || "I enjoy using this app for its rent payment service features. Everything is responsive and efficient. I found a great apartment and made secure payments effortlessly. Highly satisfied with the overall experience.";
+                navigator.clipboard.writeText(reviewText).catch(e => console.error("Auto copy failed", e));
+                showToast("Review text copied!");
+                startReviewTimer();
+            }
+
+            window.open(targetUrl, '_blank');
+        }
+
+        function copyReviewText() {
+            if (!activeOffer) return;
+            const reviewText = activeOffer.review_text || "I enjoy using this app for its rent payment service features. Everything is responsive and efficient. I found a great apartment and made secure payments effortlessly. Highly satisfied with the overall experience.";
+            
+            navigator.clipboard.writeText(reviewText).then(() => {
+                const btn = document.getElementById('btnCopyReviewText');
+                btn.innerHTML = `<i class="fa-solid fa-check"></i> Copied!`;
+                btn.style.borderColor = 'var(--accent)';
+                btn.style.color = 'var(--accent)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = `<i class="fa-solid fa-copy"></i> Copy`;
+                    btn.style.borderColor = '';
+                    btn.style.color = '';
+                }, 2000);
+            }).catch(err => {
+                console.error("Clipboard copy failed:", err);
+            });
+        }
+
+        function startReviewTimer() {
+            if (reviewCountdownInterval) clearInterval(reviewCountdownInterval);
+            reviewCountdownSeconds = 30;
+            
+            const submitBtn = document.getElementById('btnSecondaryAction');
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+            submitBtn.innerHTML = `<i class="fa-solid fa-clock" style="margin-right:6px;"></i> Wait 0:30 to Submit`;
+
+            reviewCountdownInterval = setInterval(() => {
+                reviewCountdownSeconds--;
+                if (reviewCountdownSeconds <= 0) {
+                    clearInterval(reviewCountdownInterval);
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.cursor = 'pointer';
+                    submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up" style="margin-right:6px;"></i> Submit Screenshot`;
+                } else {
+                    const formatted = reviewCountdownSeconds < 10 ? `0:0${reviewCountdownSeconds}` : `0:${reviewCountdownSeconds}`;
+                    submitBtn.innerHTML = `<i class="fa-solid fa-clock" style="margin-right:6px;"></i> Wait ${formatted} to Submit`;
+                }
+            }, 1000);
+        }
+
+        function handleSecondaryAction() {
+            // Trigger hidden file chooser input
+            document.getElementById('reviewFileInput').click();
+        }
+
+        async function handleReviewFileChange(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validate file is image
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image screenshot file!');
+                return;
+            }
+
+            const submitBtn = document.getElementById('btnSecondaryAction');
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.7';
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin" style="margin-right:6px;"></i> Uploading...`;
+
+            // Prepare multipart form data
+            const formData = new FormData();
+            formData.append('user_id', currentUserId);
+            formData.append('offer_id', activeOffer.id);
+            formData.append('app_id', currentAppId);
+            formData.append('screenshot', file);
+
+            try {
+                const response = await fetch('/api/review-submit', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                if (response.ok && data.success) {
+                    showToast('Review screenshot submitted successfully!');
+                    closeDetailsModal();
+                    loadStatusHistory(); // Refresh status logs
+                } else {
+                    alert(data.message || 'Submission failed');
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up" style="margin-right:6px;"></i> Submit Screenshot`;
+                }
+            } catch (err) {
+                console.error("Submission error:", err);
+                alert('Server connection error during upload');
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+                submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up" style="margin-right:6px;"></i> Submit Screenshot`;
+            }
+        }
+
+
+        // Toast message utility
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>${message}</span>`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.3s ease reverse forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Auto-run on start
+        window.addEventListener('DOMContentLoaded', async () => {
+            await fetchAppConfig();
+            fetchUserInfo();
+            loadOffers();
+        });
+    </script>
 </body>
 </html>
